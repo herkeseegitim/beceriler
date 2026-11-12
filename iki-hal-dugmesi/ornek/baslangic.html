@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>İki hâl düğmesi · başlangıç</title>
+<style>
+  html, body { margin: 0; background: #111; }
+  canvas { display: block; margin: 0 auto; max-width: 100vw; max-height: 100vh; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// İki hâl düğmesi: başlangıç kodu (MIT, Herkese Eğitim).
+// Dış ağ çağrısı yok. Dünyayı (dunyaCiz) değiştirin; düğme, imleç ve zamanlamayı koruyun.
+// Kayıt için window.render(t) her kare için dışarıdan çağrılır (bkz. kaydet.py).
+
+const AYAR = {
+  baslik1: "Bir tık",
+  solHal: "Tahta boş",          // ilk hâlin başlık satırı
+  sagHal: "Ders anlatıldı",     // ikinci hâlin başlık satırı
+  cagri: "İndirin, sınıfınızda kullanın.",
+  yazar: "{yazar}",
+  kurum: "{kurum}",
+  koyu: "#231B1B", krem: "#FBF4E8", vurgu: "#D62828", turuncu: "#E8731A", // örnek palet
+  tik: 8.0,         // tık anı (sn), 120 BPM'de bir bar başı
+  sure: 24          // toplam süre (sn)
+};
+window.DURATION = AYAR.sure;
+window.FPS = 60;
+
+const c = document.getElementById("c"), g = c.getContext("2d");
+const W = 1080, H = 1920;
+// Piksel dünya: 240×125, ×4 ölçek = 960×500
+const DW = 240, DH = 125, OL = 4;
+const dunya = document.createElement("canvas"); dunya.width = DW; dunya.height = DH;
+const d = dunya.getContext("2d");
+const DX = (W - DW * OL) / 2, DY = 700, DR = 220;
+
+const kis = (a, b, x) => a + (b - a) * x;
+const sinir = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+function renkKar(r1, r2, x) {
+  const p = s => [1, 3, 5].map(i => parseInt(s.slice(i, i + 2), 16));
+  const a = p(r1), b = p(r2);
+  return "rgb(" + a.map((v, i) => Math.round(kis(v, b[i], x))).join(",") + ")";
+}
+function uc(r1, r2, r3, x) { return x < 0.5 ? renkKar(r1, r2, x * 2) : renkKar(r2, r3, x * 2 - 1); }
+// Yaylı geçiş: 0'dan 1'e, hafif aşma, ~0,6 sn
+function yay(x) { x = sinir(x); return 1 - Math.exp(-7 * x) * Math.cos(9 * x) * (1 - x); }
+
+// Hâl değeri: 0 = sol hâl, 1 = sağ hâl
+function hal(t) { return t < AYAR.tik ? 0 : yay((t - AYAR.tik) / 0.6); }
+
+function dunyaCiz(t, m) {
+  d.imageSmoothingEnabled = false;
+  const mm = sinir(m);
+  // duvar ve zemin: gece -> şafak -> gündüz
+  d.fillStyle = uc("#1b2233", "#a0646a", "#f3e4c8", mm); d.fillRect(0, 0, DW, 95);
+  d.fillStyle = uc("#2a2220", "#6b4a3c", "#c79a6a", mm); d.fillRect(0, 95, DW, 30);
+  // pencere: ay -> güneş
+  d.fillStyle = uc("#0d1424", "#e7a77f", "#bfe3f5", mm); d.fillRect(14, 18, 46, 40);
+  d.fillStyle = mm < 0.5 ? "#e8e4d0" : "#ffd23f";
+  d.fillRect(mm < 0.5 ? 40 : 22, mm < 0.5 ? 24 : 26, 8, 8);
+  d.fillStyle = "#3a2a22"; d.fillRect(36, 18, 2, 40); d.fillRect(14, 37, 46, 2);
+  // tahta
+  d.fillStyle = "#4a3426"; d.fillRect(78, 14, 140, 66);
+  d.fillStyle = uc("#1d2e26", "#24402f", "#2f5a40", mm); d.fillRect(81, 17, 134, 60);
+  // ilk hâlde: tek tebeşir kırıntısı kıpırdar (ilk saniyede hareket)
+  if (m < 0.05) {
+    const k = Math.round(Math.sin(t * 6) * 2);
+    d.fillStyle = "#e9e9e0"; d.fillRect(200 + k, 72, 4, 2);
+  }
+  // ikinci hâlde: tahtaya ders yazılır (sırayla beliren çizgiler)
+  if (m > 0) {
+    const ilerle = sinir((t - AYAR.tik) / 4);
+    d.fillStyle = "#f2f0e6";
+    const satirlar = [[90, 24, 70], [90, 32, 54], [90, 40, 62]];
+    satirlar.forEach(([x, y, w], i) => {
+      const p = sinir(ilerle * 3 - i);
+      if (p > 0) d.fillRect(x, y, Math.round(w * p), 2);
+    });
+    // üçgen
+    if (ilerle > 0.6) {
+      d.fillStyle = "#ffd23f";
+      for (let i = 0; i < 18; i++) d.fillRect(170 + i, 66 - Math.floor(i * 1.2), 1, Math.max(1, Math.floor(i * 1.2) - Math.floor((i - 1) * 1.2)));
+      d.fillRect(170, 66, 18, 1); d.fillRect(187, 45, 1, 21);
+    }
+  }
+  // masa
+  d.fillStyle = "#6a4a32"; d.fillRect(70, 100, 100, 6);
+  d.fillStyle = "#4a3426"; d.fillRect(76, 106, 4, 14); d.fillRect(160, 106, 4, 14);
+  // lamba ışığı: gece sönük, gündüz gerek yok
+  d.fillStyle = mm < 0.5 ? "rgba(255,210,120,0.18)" : "rgba(255,255,255,0)";
+  d.fillRect(100, 60, 50, 40);
+}
+
+function yuvarlak(x, y, w, h, r) {
+  g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r);
+  g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+}
+
+function imlec(x, y, olcek) {
+  g.save(); g.translate(x, y); g.scale(olcek * 3, olcek * 3);
+  g.beginPath(); g.moveTo(0, 0); g.lineTo(0, 22); g.lineTo(6, 17); g.lineTo(10, 26); g.lineTo(13, 25); g.lineTo(9, 16); g.lineTo(17, 16); g.closePath();
+  g.fillStyle = "#fff"; g.fill(); g.lineWidth = 1.5; g.strokeStyle = "#111"; g.stroke(); g.restore();
+}
+
+window.render = function (t) {
+  const m = hal(t);
+  const acik = t >= AYAR.tik + 0.15; // zemin rengi tek karede değişir, yazı o anda sönük
+  const zemin = acik ? AYAR.krem : AYAR.koyu, yazi = acik ? AYAR.koyu : AYAR.krem;
+  g.fillStyle = zemin; g.fillRect(0, 0, W, H);
+
+  // başlık: geçişte kısa söner, yeni renkle döner
+  let a = 1;
+  if (t > AYAR.tik - 0.05 && t < AYAR.tik + 0.35) a = Math.abs((t - (AYAR.tik + 0.15)) / 0.2);
+  g.globalAlpha = sinir(a); g.fillStyle = yazi; g.textAlign = "center";
+  g.font = "700 92px system-ui, sans-serif"; g.fillText(AYAR.baslik1, W / 2, 400);
+  g.fillStyle = acik ? AYAR.vurgu : AYAR.turuncu;
+  g.fillText(acik ? AYAR.sagHal : AYAR.solHal, W / 2, 510);
+  g.globalAlpha = 1;
+
+  // düğme çerçevesi ve gölge
+  g.save(); g.shadowColor = "rgba(0,0,0,0.45)"; g.shadowBlur = 40; g.shadowOffsetY = 18;
+  yuvarlak(DX - 14, DY - 14, DW * OL + 28, DH * OL + 28, DR + 14); g.fillStyle = "#3b302c"; g.fill(); g.restore();
+
+  // dünya, düğmenin içine kırpılmış
+  dunyaCiz(t, m);
+  g.save(); yuvarlak(DX, DY, DW * OL, DH * OL, DR); g.clip();
+  g.imageSmoothingEnabled = false; g.drawImage(dunya, DX, DY, DW * OL, DH * OL);
+  // iç gölge
+  g.lineWidth = 30; g.strokeStyle = "rgba(0,0,0,0.25)"; yuvarlak(DX - 10, DY - 10, DW * OL + 20, DH * OL + 20, DR + 10); g.stroke();
+  g.restore();
+
+  // cam topuz: büyütme yok, yalnız kenar parıltısı
+  const R = 205, sol = DX + 250, sag = DX + DW * OL - 250, ty = DY + DH * OL / 2;
+  const kx = kis(sol, sag, m);
+  const bas = (t > AYAR.tik - 0.2 && t < AYAR.tik) ? 0.94 : 1;
+  g.save(); g.translate(kx, ty); g.scale(bas, bas);
+  g.beginPath(); g.arc(0, 0, R, 0, Math.PI * 2); g.fillStyle = "rgba(255,255,255,0.06)"; g.fill();
+  g.lineWidth = 6; g.strokeStyle = "rgba(255,255,255,0.75)"; g.stroke();
+  g.beginPath(); g.arc(0, 0, R - 18, Math.PI * 1.1, Math.PI * 1.45); g.lineWidth = 8; g.strokeStyle = "rgba(255,255,255,0.55)"; g.stroke();
+  g.restore();
+
+  // imleç: 6–8 sn arası gelir, basar, bırakır, sonra çıkar
+  if (t >= 6 && t < 10) {
+    const gel = sinir((t - 6) / 1.6), git = sinir((t - 8.6) / 1.2);
+    const e = 1 - Math.pow(1 - gel, 3);
+    let x = kis(W + 60, sol + 40, e), y = kis(H - 200, ty + 40, e);
+    if (git > 0) { x = kis(sag + 40, W + 80, git * git); y = kis(ty + 40, H - 120, git * git); }
+    else if (t >= AYAR.tik) { x = kis(sol + 40, sag + 40, m); }
+    imlec(x, y, bas);
+  }
+
+  // kapanış: 16 sn'den sonra
+  if (t >= 16) {
+    const k = sinir((t - 16) / 0.6);
+    g.globalAlpha = k; g.fillStyle = AYAR.krem; g.fillRect(0, 0, W, H);
+    g.fillStyle = AYAR.koyu; g.textAlign = "center";
+    g.font = "700 62px system-ui, sans-serif"; g.fillText(AYAR.cagri, W / 2, 900);
+    g.font = "500 54px system-ui, sans-serif"; g.fillStyle = AYAR.vurgu;
+    g.fillText(AYAR.yazar + " · " + AYAR.kurum, W / 2, 1010);
+    g.globalAlpha = 1;
+  }
+};
+
+// Tarayıcıda açınca önizleme döngüsü; kayıtta kaydet.py ?kayit=1 ile açar.
+if (!location.search.includes("kayit=1")) {
+  const t0 = performance.now();
+  (function dongu() { window.render(((performance.now() - t0) / 1000) % AYAR.sure); requestAnimationFrame(dongu); })();
+} else { window.render(0); }
+</script>
+</body>
+</html>
