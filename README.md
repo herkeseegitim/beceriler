@@ -1,12 +1,13 @@
-# Herkese Eğitim beceriler v1
+# Herkese Eğitim beceriler v1.2
 
-Claude için üç ücretsiz beceri. Video üreten ya da uzun kayıtlardan not çıkaran öğretmenler için hazırlandı.
+Claude için dört ücretsiz beceri. Video üreten, uzun kayıtlardan not çıkaran ya da kendi sitesini yapan öğretmenler için hazırlandı.
 
 | Beceri | Ne işe yarar |
 |---|---|
 | `iki-hal-dugmesi` | Bir açma-kapama düğmesinin içine küçük bir dünya çizip tek tıkla iki hâl arasında geçen 24 saniyelik dikey video biçimi. Çalışan başlangıç kodu içinde. |
 | `eyes-video-kontrol` | Videoyu teslimden önce denetler: boyut, ses yüksekliği, donuk ve siyah kare, güvenli alan, altyazı dosyası. Eyes kuruluysa kareler, transkript ve ekran yazısıyla birlikte. |
 | `uzun-video-isleme` | Saatlerce süren webinar, ders ya da konferans kaydını izlemeden slayt ve konuşmadan Türkçe rehber belgeye çevirir. |
+| `harf-magnetleri` | Sitenin sosyal medya bağlantılarını buzdolabı magneti gibi duran, sürüklenebilen harf magnetlerine çevirir. Tek parça HTML, internetsiz. |
 
 ## Kurulum
 
@@ -17,6 +18,7 @@ Beceri klasörünü olduğu gibi kendi beceri klasörünüze kopyalayın:
 ~/.claude/skills/iki-hal-dugmesi/
 ~/.claude/skills/eyes-video-kontrol/
 ~/.claude/skills/uzun-video-isleme/
+~/.claude/skills/harf-magnetleri/
 ```
 
 Windows'ta aynı yer `%USERPROFILE%\.claude\skills\` klasörüdür. Bir projeye özel kullanmak isterseniz proje klasöründeki `.claude/skills/` altına da koyabilirsiniz. Claude Code'u yeniden başlatınca beceriler görünür.
@@ -31,6 +33,7 @@ Her beceriyi ayrı ayrı zip yapın (zip'in içinde beceri klasörü ve onun iç
 | iki-hal-dugmesi | Python 3, ffmpeg | Playwright ve Chromium (videoya çevirmek için) |
 | eyes-video-kontrol | Python 3, ffmpeg, ffprobe | Eyes (MIT olarak bildirilir), whisper.cpp (MIT), ggml-large-v3-turbo-q5_0 modeli (574.041.195 bayt, whisper.cpp model deposundan) |
 | uzun-video-isleme | Python 3, ffmpeg, ffprobe, Pillow | sherpa-onnx (Apache-2.0), soundfile, sherpa-onnx Whisper base modeli (GitHub Releases; boyutu indirme sayfasında) |
+| harf-magnetleri | Python 3 | — |
 
 İsteğe bağlı kurulumlar dış kaynaktan kod ve model indirir. Bunları ayrı bir sanal ortama kurun, her adımdan önce ne indirileceğine bakın. Üçüncü taraf araçların lisanslarını kendiniz kontrol edin; bu paket onları içermez.
 
@@ -42,6 +45,7 @@ Bu becerilerin hiçbiri kendi başına yayın ya da yükleme yapmaz; yalnız ken
 - "Bu .srt dosyasında okuma hızı ve çakışma var mı?"
 - "Bu üç saatlik webinar kaydını özetle, tarihli işleri en başa koy."
 - "Boş tahtadan ders anlatılmış tahtaya geçen bir iki hâl düğmesi videosu hazırla."
+- "Sitemin alt bilgisine YouTube, Instagram ve LinkedIn için harf magnetleri yap."
 
 ## Örnekler ve atıf
 
