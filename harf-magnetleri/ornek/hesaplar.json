@@ -1,0 +1,15 @@
+{
+  "baslik": "Sosyal medya",
+  "not": "Magnetleri sürükleyebilirsiniz.",
+  "zemin": "#2A2420",
+  "hesaplar": [
+    {"harf": "YT", "ad": "YouTube", "adres": "https://www.youtube.com/@ornekkanal", "renk": "#D9322B"},
+    {"harf": "IG", "ad": "Instagram", "adres": "https://www.instagram.com/ornekhesap/", "renk": "#F28A1E"},
+    {"harf": "FB", "ad": "Facebook", "adres": "https://www.facebook.com/ornekhesap", "renk": "#2F5D8A"},
+    {"harf": "TT", "ad": "TikTok", "adres": "https://www.tiktok.com/@ornekhesap", "renk": "#FFC21A"},
+    {"harf": "X", "ad": "X", "adres": "https://x.com/ornekhesap", "renk": "#FFF4DE"},
+    {"harf": "in", "ad": "LinkedIn", "adres": "https://www.linkedin.com/in/ornekhesap/", "renk": "#2E6E5E"},
+    {"harf": "B", "ad": "Blog", "adres": "https://ornekblog.example/", "renk": "#7A3E8C"},
+    {"harf": "GH", "ad": "GitHub", "adres": "https://github.com/ornekhesap", "renk": "#6E5A44"}
+  ]
+}
