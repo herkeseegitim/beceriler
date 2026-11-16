@@ -1,4 +1,4 @@
-# Herkese Eğitim beceriler v1.2
+# Herkese Eğitim beceriler v1.3
 
 Claude için dört ücretsiz beceri. Video üreten, uzun kayıtlardan not çıkaran ya da kendi sitesini yapan öğretmenler için hazırlandı.
 

@@ -1,4 +1,4 @@
-# Herkese Eğitim skills v1.2
+# Herkese Eğitim skills v1.3
 
 Four free skills for Claude, written in Turkish, for teachers who make short videos, need notes from long recordings or build their own site. Each skill folder has a short English summary (`README.en.md`).
 
