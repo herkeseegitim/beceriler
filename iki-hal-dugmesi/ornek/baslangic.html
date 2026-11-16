@@ -19,7 +19,7 @@ const AYAR = {
   baslik1: "Bir tık",
   solHal: "Tahta boş",          // ilk hâlin başlık satırı
   sagHal: "Ders anlatıldı",     // ikinci hâlin başlık satırı
-  cagri: "İndirin, sınıfınızda kullanın.",
+  cagri: "İndirip sınıfta açabilirsiniz.",
   yazar: "{yazar}",
   kurum: "{kurum}",
   koyu: "#231B1B", krem: "#FBF4E8", vurgu: "#D62828", turuncu: "#E8731A", // örnek palet
@@ -157,7 +157,7 @@ window.render = function (t) {
     const k = sinir((t - 16) / 0.6);
     g.globalAlpha = k; g.fillStyle = AYAR.krem; g.fillRect(0, 0, W, H);
     g.fillStyle = AYAR.koyu; g.textAlign = "center";
-    g.font = "700 62px system-ui, sans-serif"; g.fillText(AYAR.cagri, W / 2, 900);
+    g.font = "700 58px system-ui, sans-serif"; g.fillText(AYAR.cagri, W / 2, 900);
     g.font = "500 54px system-ui, sans-serif"; g.fillStyle = AYAR.vurgu;
     g.fillText(AYAR.yazar + " · " + AYAR.kurum, W / 2, 1010);
     g.globalAlpha = 1;
