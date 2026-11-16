@@ -71,7 +71,7 @@ Transkripsiyonu `scripts/transkript.py` ile yapın. Özellikleri:
 - Kullanıcının diline ve sesine uygun, insan elinden çıkmış gibi yazılmış belge. Belge üretme beceriniz varsa (ör. docx) onu kullanın; PDF gerekiyorsa LibreOffice ile dönüştürün.
 - Yapı: **tarihli işler ve yapılacaklar en başta tablo hâlinde**, sonra bölüm bölüm içerik, sonda dürüstlük notu ("konuşma çevirileri otomatik çözümlemeden geçti; tutarlar ve tarihler slaytlardan doğrulandı; önemli kararlar öncesi resmi kaynaktan teyit edin").
 - İstenirse önemli slayt kareleri belgeye gömülür, altına çevirisi yazılır.
-- Süreç uzunsa ara teslim yapın: önce slayta dayalı özet, transkript bittikçe konuşma çevirileri.
+- Süreç uzunsa ara teslim yapın: önce slayta dayalı özet, transkript bittikçe konuşma çevirileri. Henüz doğrulanmamış ara özetin başına "TASLAK" yazın.
 
 ## Bilinen tuzaklar
 
@@ -83,3 +83,17 @@ Transkripsiyonu `scripts/transkript.py` ile yapın. Özellikleri:
 | Sessizlikte döngüye giren tek kelime | Tekrarlı tek kelimelik satırları atın |
 | Sesten alınan rakam yanlış | Rakamlar yalnız slayttan; şüphede dürüstlük notu |
 | Tırnaklı Türkçe metni komut satırında düzenlerken bozulma | Düzenleme betiklerini ayrı dosya olarak yazın |
+
+## Kontrol tablosu (teslim notunda her satır: uygulandı / atlandı: `<neden>` / gerekmedi / yapılamadı: araç yok)
+
+| Adım | Teslim notunda |
+|---|---|
+| 0 Keşif (süre, boyut, gömülü altyazı, çözünürlük) | uygulandı |
+| 1 Görsel tarama (kontakt sayfaları, bölüm haritası, slayt kareleri) | uygulandı |
+| 1 Kırpmadan önce yerleşim kontrol edildi | uygulandı |
+| 1 İlk özet sunuldu (transkript beklenmeden) | uygulandı |
+| 2 Ses transkripti (yalnız gereken bölümler) | uygulandı / gerekmedi |
+| 3 Çeviri ve sentez (rakamlar yalnız slayttan) | uygulandı |
+| 4 Çıktı belgesi (tarihli işler en başta, dürüstlük notu) | uygulandı |
+| Ara teslim TASLAK etiketiyle | uygulandı / gerekmedi |
+| Bilinen tuzaklara bakıldı | uygulandı |
