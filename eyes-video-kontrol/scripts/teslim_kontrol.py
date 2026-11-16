@@ -25,10 +25,10 @@ row("süre", dur <= 180, f"{dur:.1f} sn", "≤180 (Reels ≤90)")
 
 if a:
     e = run(["ffmpeg", "-hide_banner", "-nostdin", "-i", p, "-vn", "-af",
-             "loudnorm=I=-14:TP=-1:LRA=11:print_format=json", "-f", "null", "-"]).stderr
+             "loudnorm=I=-16:TP=-1:LRA=11:print_format=json", "-f", "null", "-"]).stderr
     d = json.loads(re.search(r"\{[^{}]*\"input_i\"[^{}]*\}", e, re.S).group(0))
     I, tp = float(d["input_i"]), float(d["input_tp"])
-    row("ses yüksekliği", abs(I + 14) <= 2, f"{I:.1f} LUFS", "-14 ±2")
+    row("ses yüksekliği", abs(I + 16) <= 1, f"{I:.1f} LUFS", "-16 ±1")
     row("tepe", tp <= -1, f"{tp:.1f} dBTP", "≤ -1")
 
 e = run(["ffmpeg", "-hide_banner", "-nostdin", "-i", p,
@@ -43,11 +43,11 @@ row("siyah", blk / dur <= 0.10, f"{blk:.1f} sn", "≤%10")
 row("donuk en uzun", (max(frz) if frz else 0) <= max(3, 0.3 * dur), f"{max(frz) if frz else 0:.1f} sn", "≤ max(3 sn, %30)")
 row("sessizlik", sil / dur <= 0.5, f"{sil:.1f} sn", "≤%50")
 
-# Güvenli alan: Shorts alt %18, sağ %12 (Reels alt %20, sağ %12). Orta kareden şeritli görüntü çıkar.
+# Güvenli alan: yazılar x < 920, y ≤ 1500 (1080x1920'de); dışı kırmızı. Orta kareden görüntü çıkar.
 h, w = v["height"], v["width"]
 run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{dur/2:.2f}", "-i", p, "-frames:v", "1", "-vf",
-     f"drawbox=y={int(h*0.82)}:w=iw:h={int(h*0.18)}:color=red@0.35:t=fill,"
-     f"drawbox=x={int(w*0.88)}:w={int(w*0.12)}:h=ih:color=red@0.35:t=fill",
+     f"drawbox=y={int(h*1500/1920)}:w=iw:h={h-int(h*1500/1920)}:color=red@0.35:t=fill,"
+     f"drawbox=x={int(w*920/1080)}:w={w-int(w*920/1080)}:h=ih:color=red@0.35:t=fill",
      p.rsplit('.', 1)[0] + "_guvenli_alan.png"])
 
 for r in rows: print(f"{r[0]:6} {r[1]:16} {r[2]:>14}   hedef {r[3]}")
