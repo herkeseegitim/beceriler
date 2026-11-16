@@ -17,7 +17,7 @@ Bu beceri biçimi verir; renk, dil, kapanış ve onay akışı projenizindir. Ü
 
 | Proje | Dünya | Dil | Kapanış |
 |---|---|---|---|
-| Örnek: Herkese Eğitim (ÇizTahta, YazTahta) | Bir sınıf, bir tahta, bir masa; ürünün kendi nesnesi (cetvel, harf vagonu, kalem) | Türkçe, siz dili | Ürüne özgü kapanış ve çağrı cümlesi ("İndirin, sınıfınızda kullanın.") |
+| Örnek: Herkese Eğitim (ÇizTahta, YazTahta) | Bir sınıf, bir tahta, bir masa; ürünün kendi nesnesi (cetvel, harf vagonu, kalem) | Türkçe, siz dili | Ürüne özgü kapanış ve kullanım bilgisi ("İndirip sınıfta açabilirsiniz."); imza en az 3 sn tam görünür, izleyiciye çağrı yok |
 | Sizin projeniz | Projenin en tanınır nesnesi | Projenin dili | Projenin kendi kapanış kartı ({kurum}, {yazar}) |
 
 Örnek palet (Herkese Eğitim): krem #FBF4E8, koyu #231B1B, kırmızı #D62828, turuncu #E8731A. Kendi paletinizi kullanın.
@@ -51,10 +51,21 @@ Tek satırda: "Sol hâl: ____. Sağ hâl: ____. Tık şunu temsil eder: ____."
 ## 5. Üretim ve kontrol
 - Yöntem: sayfada `render(t)` fonksiyonu olan bir canvas, Playwright ile her kare için çağırıp görüntü alma, ffmpeg ile H.264 (yuv420p, bt709) videoya çevirme.
 - Başlangıç kodu bu klasörde: `ornek/baslangic.html` (dünya, düğme, imleç, başlık ve kapanış) ve `ornek/kaydet.py` (kareleri alır, videoyu yapar). Dünyayı değiştirin, düğme ve imleç kodunu koruyun. Ayrıntı: `ornek/NASIL.md`.
-- Kontrol: videoyu teslimden önce `eyes-video-kontrol` becerisiyle ya da kendi kontrol listenizle açın.
+- Kontrol: videoyu teslimden önce `eyes-video-kontrol` becerisiyle ya da kendi kontrol listenizle açın. Mümkünse yapımını görmemiş ikinci bir göz (ya da ayrı bir ajan) son kez bakar; "hazır" bu bakıştan sonra yazılır.
 - Video hazır olsa bile yayın sizin işinizdir: geri alınamayan her adım için o an açık onay alın.
 
 ## Uyarlama sınırları
 - Aynı projede biçim sık tekrarlanırsa şaşırtma kaybolur: bir projede üst üste iki videoda kullanılmaz.
 - Bir projenin dünyası başka projede kullanılmaz.
 - Düğme her zaman sizin çiziminizdir; kaynak videodan hiçbir görsel öğe kopyalanmaz.
+
+## Kontrol tablosu (teslim notunda her satır: uygulandı / atlandı: `<neden>` / gerekmedi / yapılamadı: araç yok)
+
+| Adım | Teslim notunda |
+|---|---|
+| 1 Proje belirlendi, kuralları okundu (renkler, logo, dil, kapanış) | uygulandı |
+| 2 İki hâl tek satırda | uygulandı: `<satır>` |
+| 3 Sahne (piksel dünya, düğme, imleç, başlık geçişi) | uygulandı |
+| 4 Zamanlama (tık bar başında, kapanış son akordan önce) | uygulandı |
+| 5 Üretim ve kontrol (eyes-video-kontrol ya da kendi listeniz, ikinci göz) | uygulandı |
+| Uyarlama sınırları | uygulandı |
