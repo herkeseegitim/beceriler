@@ -52,9 +52,9 @@ En az: sahne başına bir temas sayfası, her anahtar an ve geçiş için bir ş
 
 Yalnız ffmpeg/ffprobe kullanır, ağ çağrısı yok. Yöntem kajisho5/ffmpeg-skill check.py'den alındı (MIT olarak bildirilir), kod bu pakete özgüdür. Ölçtükleri:
 - Boyut 1080x1920, 24–60 kare/sn, h264 yuv420p, süre (Shorts ≤180 sn, Reels ≤90 sn).
-- **Ses yüksekliği -14 LUFS ±2, tepe ≤ -1 dBTP.** Shorts ve Reels oynatıcısı daha yükseği kısar, daha düşüğü olduğu gibi bırakır; video sessiz kalır. Uyarı çıkarsa son miksajda `loudnorm=I=-14:TP=-1:LRA=11` iki geçişle uygulanır. Bu ölçüm son dosya içindir; müzik altyapısının kendi düzeyi ayrı ayarlanır.
+- **Ses yüksekliği -16 LUFS ±1, tepe ≤ -1 dBTP.** Kısa videolarda kullandığımız düzey budur; platformlar daha yükseğini kısar. Kendi kanalınız başka bir düzey kullanıyorsa eşiği betikte değiştirin. Uyarı çıkarsa son miksajda `loudnorm=I=-16:TP=-1:LRA=11` iki geçişle uygulanır. Bu ölçüm son dosya içindir; müzik altyapısının kendi düzeyi ayrı ayarlanır.
 - Siyah kare ≤%10, en uzun donuk aralık ≤ max(3 sn, sürenin %30'u), sessizlik ≤%50. Sessiz animasyonda sessizlik uyarısı beklenir, not düşülür. Bilerek durağan bırakılan kapanış kartı donukluk uyarısı verebilir; nedeni yazılır.
-- Orta kareden `<ad>_guvenli_alan.png`: Shorts'un alt %18 ve sağ %12 şeridi kırmızı boyalı. Görüntüyü açın; yazı kırmızıya giriyorsa güvenli alana taşınır.
+- Orta kareden `<ad>_guvenli_alan.png`: yazı için güvenli alanın dışı (1080x1920'de y 1500'ün altı ve x 920'nin sağı) kırmızı boyalı. Görüntüyü açın; yazı kırmızıya giriyorsa güvenli alana taşınır.
 
 ## Altyazı dosyası denetimi (.srt, saniyenin onda biri)
 `python3 -I scripts/srt_denetim.py dosya.srt`
@@ -65,9 +65,9 @@ Kurallar: satır ≤ 42 harf, en çok 2 satır, iki altyazı üst üste binmez, 
 
 ## Kontrol listesi (video teslimi öncesi)
 - **Açılış (ilk 3 sn):** Yazı ilk karede tam mı, ürünün özünü söylüyor mu, arkada sonuç görünüyor mu, logo girişi yok mu?
-- **Kapanış (son 4 sn):** Ürüne özgü nesne, kanal ya da proje adınız, çağrı cümlesi var mı; başa dönen sahne yok mu?
+- **Kapanış (son 4 sn):** Ürüne özgü nesne, kanal ya da proje adınız, imzanız ya da logonuz en az 3 sn tam görünüyor mu? İzleyiciye "yorumlara yazın", "paylaşın" gibi çağrı yok mu? Son kare ilk kareye bağlanabilir, ama kapanış kısaltılmaz.
 - **Kapak:** Teslim klasöründe kapak görseli var mı; başlık ve gerçek ekran görüntüsü tam mı?
-- **Güvenli alan:** Önemli yazı y=250–1500 ve x<920 içinde mi (üst, alt ve sağdaki uygulama düğmeleri kapatır)?
+- **Güvenli alan:** Önemli yazı y=240–1500 ve x<920 içinde mi (üst, alt ve sağdaki uygulama düğmeleri kapatır)?
 - **Okuma hızı:** Her hap altyazı ve açılış metni için karakter / ekranda kalma süresi ≤ 15 (açılışta ≤ 19).
 - **Şerit ve kırpım:** Her anahtar anın şeridi ve her temas noktasının kırpımı açıldı mı; okuma tablosundaki her okuma yeterli kare aldı mı, başka okumayla binmiyor mu?
 - Her cümle doğru sahnenin başında mı (segment start ≈ sahne başlangıcı)?
@@ -76,7 +76,21 @@ Kurallar: satır ≤ 42 harf, en çok 2 satır, iki altyazı üst üste binmez, 
 - Altyazı ile söylenen arasında fark var mı? Fark varsa sahibine sorun; Whisper Türkçede ek ya da ünlü kaçırabilir ("Listeyi" yerine "Listeye").
 - Ekran yazılarında kendi yasak sözcük listenizdeki bir ifade var mı (kurum adı, kişisel bilgi, kullanmadığınız kalıplar)?
 - Konuşma hızı (words_per_minute) 110–160 arası mı; boş saniye var mı?
-- Yüklenecek .srt varsa altyazı denetimi "sorun yok" dedi mi?
+- YouTube'a giden konuşmalı videoda Türkçe .srt var mı (otomatik altyazı müzik bölümünde "[Müzik]" yazısını yanıp söndürür)? Yüklenecek .srt varsa altyazı denetimi "sorun yok" dedi mi?
 - Teknik ölçüm tablosunda UYARI kaldı mı? Kaldıysa nedeni yazılı mı (ör. sessiz animasyon)?
 
 Sonucu sahibine kısa yazın: ne kontrol edildi, ne bulundu, ne düzeltildi. Video yüklemek ya da paylaşmak bu becerinin işi değildir; geri alınamayan her adım için o an açık onay alın.
+
+Bu kontrol videoyu yapanın öz kontrolüdür. Mümkünse videoyu yapımını görmemiş ikinci bir göz (ya da ayrı bir ajan) son bir kez bakar; "hazır" sözcüğü bu bakıştan sonra yazılır.
+
+## Kontrol tablosu (teslim notunda her satır: uygulandı / atlandı: `<neden>` / gerekmedi / yapılamadı: araç yok)
+
+| Adım | Teslim notunda |
+|---|---|
+| Kurulum (Eyes, whisper.cpp, model) | uygulandı / gerekmedi / yapılamadı |
+| Teknik ölçüm (teslim_kontrol.py) | uygulandı: `<tablo>` |
+| Eyes index ve overview.md | uygulandı / yapılamadı (ffmpeg kareleriyle bakıldı) |
+| Üç yakınlıkta bakış (temas sayfası, şerit, temas kırpımı, okuma sırası) | uygulandı |
+| Altyazı dosyası denetimi (srt_denetim.py) | uygulandı / gerekmedi |
+| Kontrol listesi madde madde | uygulandı: `<işaretli liste>` |
+| İkinci göz | uygulandı / yapılamadı |
